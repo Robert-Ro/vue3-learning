@@ -10,7 +10,7 @@ import chalk from 'chalk'
 const ipAddress = ip.address()
 
 const config: Configuration & WebpackDevServerConfiguration = {
-  entry: resolve(__dirname, 'src/main.ts'),
+  entry: resolve(__dirname, './src/hot.ts'),
   output: {
     filename: 'bundle.js',
     clean: true,
@@ -26,7 +26,7 @@ const config: Configuration & WebpackDevServerConfiguration = {
       {
         test: /\.ts$/,
         loader: 'ts-loader',
-        options: { appendTsSuffixTo: [/\.vue$/] },
+        options: { appendTsSuffixTo: [/\.vue$/], transpileOnly: true },
       },
       {
         test: /\.tsx$/,
@@ -52,18 +52,15 @@ const config: Configuration & WebpackDevServerConfiguration = {
     contentBase: join(__dirname, 'dist'),
     compress: true,
     port: 9000,
+    hot: true,
     host: ipAddress,
-    clientLogLevel: 'error',
     historyApiFallback: true,
-    noInfo: true,
     overlay: true,
     onListening: (server) => {
       const { port } = server.listeningApp.address()
       console.log('Listening on port:', chalk.blue(`http://${ipAddress}:${port}`))
     },
     proxy: {},
-    stats: 'errors-only',
-    writeToDisk: true,
   },
 }
 
